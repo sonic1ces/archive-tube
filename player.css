@@ -1,91 +1,175 @@
-/* player.css */
+/* =========================================
+   MODERN VIDEO PLAYER STYLES (2025 Edition)
+   ========================================= */
 
+/* Главный контейнер плеера */
 .video-player-frame {
     position: relative;
     width: 100%;
     background: #000;
     aspect-ratio: 16 / 9;
-    border: 1px solid #333;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 12px; 
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Сам элемент видео (чистый, без кнопок) */
+/* Элемент видео */
+video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain; /* Сохраняет пропорции без искажений */
+}
+
+/* Скрываем системные кнопки браузера */
 video::-webkit-media-controls {
     display: none !important;
 }
 
+/* 🛡️ ЗАЩИТНЫЙ СЛОЙ (SHIELD) 
+   Этот слой перехватывает "Инспектор объектов" (Ctrl+Shift+C). 
+   При попытке выбрать видео, вор выберет этот пустой невидимый блок. */
+.video-shield {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 45px); /* Оставляем доступ к кнопкам внизу */
+    z-index: 8; 
+    background: rgba(0,0,0,0); /* Прозрачный */
+    cursor: pointer;
+}
+
+/* Анимация анти-захвата (OBS) для щита */
+/* Создает микро-мерцание, которое мешает алгоритмам сжатия при записи */
+@keyframes anti-obs {
+    0% { background: rgba(255,255,255,0.005); }
+    50% { background: rgba(255,255,255,0.01); }
+    100% { background: rgba(255,255,255,0.005); }
+}
+.video-shield:active {
+    animation: anti-obs 0.1s infinite;
+}
+
+/* Современная панель управления (Glassmorphism) */
 .custom-player-controls {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 35px;
-    background: linear-gradient(to bottom, #444 0%, #222 100%); /* Тот самый градиент */
+    height: 45px;
+    background: rgba(15, 15, 15, 0.75); /* Полупрозрачный фон */
+    backdrop-filter: blur(12px); /* Размытие заднего плана */
+    -webkit-backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
-    padding: 0 10px;
-    border-top: 1px solid #555;
+    padding: 0 15px;
     z-index: 10;
 }
 
-/* Красная полоска прогресса */
+/* --- ПРОГРЕСС-БАР --- */
 .progress-bar-bg {
     position: absolute;
-    top: -4px;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    background: #555;
+    height: 3px;
+    background: rgba(255,255,255,0.2);
     cursor: pointer;
+    transition: height 0.2s;
+}
+
+.progress-bar-bg:hover {
+    height: 6px; /* Расширяется при наведении */
 }
 
 .progress-bar-red {
-    width: 30%; /* Будет меняться через JS */
+    width: 0%;
     height: 100%;
-    background: #f00;
+    background: #ff0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Свечение полоски */
     position: relative;
+    transition: width 0.1s linear;
 }
 
-/* Кнопки управления */
+/* --- КНОПКИ УПРАВЛЕНИЯ --- */
 .play-btn {
     color: white;
-    font-size: 14px;
+    font-size: 18px;
     cursor: pointer;
-    margin-right: 15px;
-    font-family: Arial, sans-serif;
+    margin-right: 20px;
+    opacity: 0.9;
+    transition: transform 0.1s, opacity 0.2s;
+    user-select: none;
 }
 
-.volume-icon {
-    color: #ccc;
-    font-size: 18px;
-    margin-right: 10px;
+.play-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
 }
 
 .time-display {
-    color: #ddd;
-    font-size: 11px;
-    font-family: Arial, sans-serif;
+    color: #eee;
+    font-size: 13px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
-/* Центральная кнопка Play при старте */
+/* --- ЦЕНТРАЛЬНАЯ КНОПКА PLAY (Большая) --- */
 .big-play-button {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 70px;
-    height: 50px;
-    background: rgba(0,0,0,0.7);
-    border-radius: 10px;
+    height: 70px;
+    background: rgba(255, 0, 0, 0.95);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: 2px solid #fff;
-    transition: 0.2s;
+    border: none;
+    z-index: 11;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.4);
+}
+
+/* Треугольник внутри кнопки */
+.big-play-button::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 20px solid white;
+    margin-left: 6px;
 }
 
 .big-play-button:hover {
-    background: #f00;
-    border-color: #f00;
+    transform: translate(-50%, -50%) scale(1.1);
+    background: #ff0000;
+    box-shadow: 0 15px 35px rgba(255, 0, 0, 0.6);
+}
+
+/* --- ПРЫГАЮЩИЙ ВОДЯНОЙ ЗНАК (ЗАЩИТА ОТ ОБС) --- */
+.watermark-text {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.15); /* Прозрачный ник */
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 9;
+    white-space: nowrap;
+    transition: all 1s ease-in-out; /* Плавное перемещение */
+    user-select: none;
+}
+
+/* --- АДАПТИВНОСТЬ ДЛЯ SHORTS --- */
+.video-player-frame.is-shorts {
+    max-width: 400px;
+    aspect-ratio: 9 / 16;
+    margin: 0 auto;
 }

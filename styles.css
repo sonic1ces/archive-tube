@@ -1,22 +1,24 @@
 /* =========================================
-   BASE STYLES - YouTube Dark Theme
+   1. ОБЩИЕ СТИЛИ (BASE)
    ========================================= */
 body {
-    background-color: #0f0f0f; /* Глубокий черный YT */
+    background-color: #0f0f0f; /* Глубокий черный YouTube */
     color: #f1f1f1;
-    font-family: "Roboto", "Arial", sans-serif;
+    font-family: "Inter", "Roboto", "Arial", sans-serif; 
     margin: 0;
     padding: 0;
-    line-height: 1.2;
+    line-height: 1.4;
 }
 
-/* Header / Navigation */
+/* Шапка с эффектом размытия (Glassmorphism) */
 header {
-    background-color: #0f0f0f;
+    background-color: rgba(15, 15, 15, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     padding: 12px 24px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #272727;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -29,15 +31,14 @@ header {
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
 }
 
 .logo span {
     color: white;
-    font-weight: normal;
+    font-weight: 500;
 }
 
-/* Main Container */
 .container {
     max-width: 1280px;
     margin: 0 auto;
@@ -45,39 +46,48 @@ header {
 }
 
 /* =========================================
-   VIDEO SECTION (YouTube Style)
+   2. СЕТКА ВИДЕО (GRID)
    ========================================= */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 24px;
     margin-top: 20px;
 }
 
+/* Карточка видео */
 .card {
     background: transparent;
     text-decoration: none;
     color: white;
-    transition: 0.2s;
+    display: block;
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.card:hover {
+    transform: translateY(-6px);
 }
 
 .thumbnail {
     width: 100%;
     aspect-ratio: 16 / 9;
-    background-color: #2b2b2b;
+    background-color: #1a1a1a;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
     position: relative;
-    border: 1px solid #333;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: border-color 0.3s;
 }
 
-.thumbnail img {
+.card:hover .thumbnail {
+    border-color: rgba(255, 0, 0, 0.5);
+}
+
+.thumbnail video, .thumbnail img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .video-info {
@@ -85,57 +95,39 @@ header {
 }
 
 .video-info h3 {
-    font-size: 16px;
-    margin: 0 0 4px 0;
+    font-size: 15px;
+    margin: 0 0 5px 0;
     font-weight: 500;
     color: #f1f1f1;
+    line-height: 1.4;
 }
 
 .video-info p {
-    font-size: 14px;
+    font-size: 13px;
     color: #aaa;
     margin: 0;
 }
 
-/* Video Player */
-.video-player-container {
-    width: 100%;
-    max-width: 900px;
-    background: #000;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #333;
-    margin: 20px 0;
-}
-
-video {
-    width: 100%;
-    display: block;
-}
-
 /* =========================================
-   AVATAR ARCHIVE (Monthly Timeline)
+   3. АРХИВ АВАТАРОК И СООБЩЕСТВО
    ========================================= */
 .avatar-history {
-    background: #1a1a1a;
-    border-radius: 15px;
+    background: rgba(26, 26, 26, 0.5);
+    border-radius: 16px;
     padding: 24px;
     margin-top: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .avatar-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 20px;
 }
 
-.avatar-item {
-    text-align: center;
-}
-
 .avatar-frame {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     margin: 0 auto 10px;
     display: flex;
@@ -143,10 +135,18 @@ video {
     justify-content: center;
     padding: 3px;
     background: #000;
+    transition: all 0.3s ease;
 }
 
-.avatar-frame.found { border: 2px solid #2ba640; } /* Найденная аватарка */
-.avatar-frame.lost { border: 2px dashed #ff4e4e; } /* Утерянная аватарка */
+.avatar-frame.found { 
+    border: 2px solid #2ba640; 
+    box-shadow: 0 0 15px rgba(43, 166, 64, 0.2);
+}
+
+.avatar-frame.lost { 
+    border: 2px dashed #ff4e4e; 
+    opacity: 0.5;
+}
 
 .avatar-img {
     width: 100%;
@@ -155,64 +155,30 @@ video {
     object-fit: cover;
 }
 
-.month-label {
-    font-size: 13px;
-    font-weight: bold;
-    display: block;
-}
-
-/* =========================================
-   COMMUNITY POSTS (Archive Content)
-   ========================================= */
+/* Посты сообщества */
 .community-post {
-    background: #1a1a1a;
-    border: 1px solid #333;
+    background: #161616;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    padding: 16px;
+    padding: 18px;
     margin-bottom: 20px;
     max-width: 600px;
+    transition: background 0.2s;
 }
 
-.post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
+.community-post:hover {
+    background: #1a1a1a;
 }
 
-.post-avatar-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #444;
-    margin-right: 12px;
-}
-
-.post-text {
-    font-size: 15px;
-    line-height: 1.5;
-    white-space: pre-wrap;
-}
-
-.post-photo {
-    width: 100%;
-    margin-top: 12px;
-    border-radius: 8px;
-    border: 1px solid #333;
-    max-height: 500px;
-    object-fit: contain;
-}
-
-/* =========================================
-   STATUS TAGS (Recovery Status)
-   ========================================= */
+/* Теги статуса */
 .status-tag {
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-weight: bold;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
     text-transform: uppercase;
     display: inline-block;
-    margin-top: 5px;
+    margin-top: 8px;
 }
 
 .found { color: #2ba640; background: rgba(43, 166, 64, 0.1); border: 1px solid #2ba640; }
@@ -221,8 +187,8 @@ video {
 
 .source-label {
     font-size: 10px;
-    color: #00ff41; /* Цвет хакера для восстановленных данных */
+    color: #00ff41;
     margin-top: 10px;
     display: block;
-    font-family: monospace;
+    font-family: 'Courier New', monospace;
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конструктор Архива Амирхана</title>
+    <style>
+        body { background: #0f0f0f; color: #fff; font-family: sans-serif; padding: 20px; }
+        .box { background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; background: #000; border: 1px solid #444; color: #0f0; border-radius: 5px; box-sizing: border-box;}
+        button { background: #cc0000; color: #fff; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; width: 100%; }
+        button:hover { background: #ff0000; }
+        #resultCode { background: #000; color: #0f0; padding: 15px; border: 1px solid #0f0; white-space: pre-wrap; display: none; margin-top: 15px; font-family: monospace; }
+        h2 { color: #aaa; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>🛠 Конструктор Архива</h1>
+
+    <div class="box">
+        <h2>1. Создать КАНАЛ</h2>
+        <input type="text" id="cID" placeholder="Технический ID (напр: amirhan_channel)">
+        <input type="text" id="cName" placeholder="Название канала для людей">
+        <input type="text" id="cAva" placeholder="Путь к фото (напр: avatars/ava1.jpg)">
+        <input type="text" id="cColor" placeholder="Цвет канала (напр: #ff6600)">
+        <button onclick="genChannel()">Сгенерировать код КАНАЛА</button>
+    </div>
+
+    <div class="box">
+        <h2>2. Создать ВИДЕО</h2>
+        <input type="text" id="vID" placeholder="ID видео (напр: pon_video_1)">
+        <input type="text" id="vTitle" placeholder="Название видео">
+        <input type="text" id="vFile" placeholder="Имя файла (напр: videos/clip.mp4)">
+        <input type="text" id="vChan" placeholder="Технический ID канала (как в пункте 1)">
+        <input type="text" id="vDate" placeholder="Дата (напр: 15 мая 2024)">
+        <input type="number" id="vTime" placeholder="Секунда для превью (напр: 10)">
+        <select id="vType">
+            <option value="video">Обычное видео</option>
+            <option value="shorts">Shorts (вертикальное)</option>
+        </select>
+        <button onclick="genVideo()">Сгенерировать код ВИДЕО</button>
+    </div>
+
+    <div id="resultCode"></div>
+    <p id="hint" style="display:none; text-align:center; color:#888;">Скопируй этот код и вставь его в archive.js</p>
+
+    <script>
+        const res = document.getElementById('resultCode');
+        const hint = document.getElementById('hint');
+
+        function genChannel() {
+            const id = document.getElementById('cID').value;
+            const name = document.getElementById('cName').value;
+            const ava = document.getElementById('cAva').value;
+            const color = document.getElementById('cColor').value || '#ffffff';
+            
+            const code = `'${id}': {\n    name: '${name}',\n    subscribers: 'Архив',\n    color: '${color}',\n    avatars: ['${ava}']\n},`;
+            res.innerText = code;
+            res.style.display = 'block';
+            hint.style.display = 'block';
+        }
+
+        function genVideo() {
+            const id = document.getElementById('vID').value;
+            const title = document.getElementById('vTitle').value;
+            const file = document.getElementById('vFile').value;
+            const chan = document.getElementById('vChan').value;
+            const date = document.getElementById('vDate').value;
+            const time = document.getElementById('vTime').value || 5;
+            const type = document.getElementById('vType').value;
+
+            const code = `'${id}': {\n    title: '${title}',\n    file: '${file}',\n    channel: '${chan}',\n    date: '${date}',\n    preview: ${time},\n    type: '${type}'\n},`;
+            res.innerText = code;
+            res.style.display = 'block';
+            hint.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

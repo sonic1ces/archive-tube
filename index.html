@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архив Амирхана - Главная</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Стили для списка каналов в верхней части */
+        .channels-section {
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #222;
+        }
+
+        .channel-list {
+            display: flex;
+            gap: 25px;
+            overflow-x: auto;
+            padding: 10px 5px;
+            scrollbar-width: thin;
+        }
+
+        .channel-card {
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            min-width: 110px;
+            transition: transform 0.2s;
+        }
+
+        .channel-card:hover {
+            transform: scale(1.05);
+        }
+
+        .channel-avatar-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #333;
+        }
+
+        .channel-name-label {
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        /* Поле поиска */
+        .search-container {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        #globalSearch {
+            flex: 1;
+            background: #121212;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        #globalSearch:focus {
+            border-color: #f00;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+        <a href="index.html" class="logo">🔴 Archive<span>Tube</span></a>
+        <div style="color: #444; font-size: 11px; font-family: monospace;">SYS_STATUS: ACTIVE</div>
+    </div>
+</header>
+
+<div class="container">
+    
+    <div class="search-container">
+        <input type="text" id="globalSearch" placeholder="Введите ID видео или название для поиска в базе Амирхана...">
+    </div>
+
+    <section class="channels-section">
+        <h2 style="font-size: 18px; margin-bottom: 15px; color: #aaa;">Доступные каналы:</h2>
+        <div class="channel-list" id="channelGrid">
+            </div>
+    </section>
+
+    <section>
+        <h2 style="font-size: 22px; margin-bottom: 20px;">Все восстановленные материалы:</h2>
+        <div class="grid" id="videoGrid">
+            </div>
+    </section>
+
+</div>
+
+<script src="archive.js"></script>
+
+<script>
+    // Локальная логика для поиска
+    document.getElementById('globalSearch').addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('#videoGrid .card');
+        
+        cards.forEach(card => {
+            const title = card.querySelector('h3').innerText.toLowerCase();
+            const idLabel = card.getAttribute('href'); // Содержит ID в ссылке
+            
+            if (title.includes(query) || idLabel.includes(query)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // Важное примечание: сама отрисовка элементов (каналов и видео) 
+    // уже прописана в твоем archive.js в функции renderHomePage()
+</script>
+
+</body>
+</html>

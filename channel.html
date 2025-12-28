@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Канал - ArchiveTube</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <div class="container"><a href="index.html" class="logo">🔴 Archive<span>Tube</span></a></div>
+</header>
+
+<div class="container">
+    <div id="channelHeader" style="display: flex; align-items: center; padding: 30px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px;">
+        <div id="channelAva" style="width: 100px; height: 100px; border-radius: 50%; background-size: cover; margin-right: 20px;"></div>
+        <div>
+            <h1 id="channelName" style="margin: 0;"></h1>
+            <p id="channelSubs" style="color: #888; margin: 5px 0;"></p>
+        </div>
+    </div>
+
+    <h2>Видео канала</h2>
+    <div class="grid" id="channelVideos">
+        </div>
+</div>
+
+<script src="archive.js"></script>
+<script>
+    function renderChannelPage() {
+        const params = new URLSearchParams(window.location.search);
+        const cId = params.get('c'); // Получаем ID канала из ссылки (?c=orange_skull)
+        const chan = channels[cId];
+        
+        if (chan) {
+            // 1. Настраиваем оформление
+            document.title = chan.name + " - Архив";
+            document.getElementById('channelName').innerText = chan.name;
+            document.getElementById('channelSubs').innerText = chan.subscribers + " подписчиков";
+            document.getElementById('channelAva').style.backgroundImage = `url('${chan.avatars[0]}')`;
+            document.getElementById('channelHeader').style.borderColor = chan.color;
+
+            // 2. Фильтруем видео: показываем только те, что принадлежат этому каналу
+            const vGrid = document.getElementById('channelVideos');
+            for (const vId in archiveDatabase) {
+                const video = archiveDatabase[vId];
+                if (video.channel === cId) {
+                    vGrid.innerHTML += `
+                        <a href="watch.html?v=${vId}" class="card">
+                            <div class="thumbnail">
+                                <video muted><source src="${video.file}#t=${video.preview}"></video>
+                            </div>
+                            <div class="video-info">
+                                <h3>${video.title}</h3>
+                                <small>${video.date}</small>
+                            </div>
+                        </a>`;
+                }
+            }
+        }
+    }
+    window.onload = renderChannelPage;
+</script>
+</body>
+</html>
